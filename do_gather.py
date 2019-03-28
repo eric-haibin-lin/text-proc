@@ -33,7 +33,6 @@ logging.info('Number of input files to process = %d', num_files)
 if not os.path.exists(out_dir):
     os.makedirs(out_dir)
 
-
 def f1(x):
     file_split, worker_id = x
     count = 0
