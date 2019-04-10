@@ -142,11 +142,11 @@ python split_wiki.py
 ## Stats
 #### book-corpus-feb-split-uncased
 * Dataset size: 1.7G
-* # sub-words:  380,207,517 (380.2 Million)
+* num sub-words:  380,207,517 (380.2 Million)
 
 #### enwiki-feb-doc-split
 
-* # words = 2,052,479,811 (2.1 Billion)
+* num words = 2,052,479,811 (2.1 Billion)
 
 #### story-feb-split
 
