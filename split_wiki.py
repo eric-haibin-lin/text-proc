@@ -7,7 +7,7 @@ import time
 import logging
 
 parser = argparse.ArgumentParser(description='Sentence tokenizer for BERT documents.')
-parser.add_argument('--suffix', type=str, default='*.doc',
+parser.add_argument('--in_files', type=str, default='*.doc',
                     help='Input files suffix')
 parser.add_argument('--out_dir', type=str, default='~/enwiki-feb-doc-split/',
                     help='Output dir. Default is "~/enwiki-feb-doc/"')
@@ -19,17 +19,17 @@ COUNT = 6
 
 # arguments
 out_dir = os.path.expanduser(args.out_dir)
-input_files = sorted(glob.glob(os.path.join(out_dir, args.suffix)))
+input_files = sorted(glob.glob(args.in_files))
 num_files = len(input_files)
 logging.basicConfig(level=logging.INFO)
 logging.info('Number of input files to process = %d', num_files)
 
 def f():
-    dev = io.open(os.path.join(out_dir, 'wiki.dev'), 'w', encoding="utf-8")
-    test = io.open(os.path.join(out_dir, 'wiki.test'), 'w', encoding="utf-8")
+    dev = io.open(os.path.join(out_dir, os.path.basename(input_files[-1]) + '.dev'), 'w', encoding="utf-8")
+    test = io.open(os.path.join(out_dir, os.path.basename(input_files[-1]) + '.test'), 'w', encoding="utf-8")
     for input_file in input_files:
         with io.open(input_file, 'r', encoding="utf-8") as fin:
-            with io.open(input_file + '.train', 'w', encoding="utf-8") as fout:
+            with io.open(os.path.join(out_dir, os.path.basename(input_file) + '.train'), 'w', encoding="utf-8") as fout:
                 documents = fin.read().split('\n\n')
                 num_dev = 0
                 num_test = 0
