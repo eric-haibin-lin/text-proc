@@ -11,10 +11,10 @@ import tokenizer as tokenization
 parser = argparse.ArgumentParser(description='BERT tokenizer')
 parser.add_argument('--data', type=str, default='~/book-corpus-feb-stn/*/*.txt',
                     help='Input files. Default is "*.txt"')
-parser.add_argument('--nworker', type=int, default=8,
+parser.add_argument('--nworker', type=int, default=1,
                     help='Number of workers for parallel processing.')
-parser.add_argument('--out_dir', type=str, default='~/book-corpus-gather/',
-                    help='Output dir. Default is ~/book-corpus-gather/')
+parser.add_argument('--out_dir', type=str, default='~/book-corpus-large-gather/',
+                    help='Output dir. Default is ~/book-corpus-large-gather/')
 parser.add_argument('--suffix', type=str, default='doc',
                     help='Suffix for outputs')
 parser.add_argument('--block-size', type=int, default=32,
@@ -39,7 +39,7 @@ def f1(x):
     out_file = None
     total_size = 0
     for in_path in file_split:
-        in_file = io.open(in_path, 'r', encoding='utf-8')
+        in_file = io.open(in_path, 'r', encoding='utf-8-sig')
         curr_size = os.path.getsize(in_path)
         if args.block_size * 1024 * 1024 < total_size + curr_size:
             out_file.close()
@@ -50,7 +50,10 @@ def f1(x):
             out_path = os.path.join(out_dir, 'part-{}.{}'.format(str(count + 1000 * worker_id).zfill(4), args.suffix))
             out_file = io.open(out_path, 'w', encoding="utf-8")
         total_size += curr_size
-        out_file.write(in_file.read())
+        content = in_file.read()
+        if content[-1] == content[-2] and content[-1] == '\n':
+            content = content[:-1]
+        out_file.write(content)
 
 if __name__ == '__main__':
     p = Pool(num_workers)
